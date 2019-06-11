@@ -1,0 +1,68 @@
+dataset: 'openpose'
+joints_to_ign:
+    - 1
+    - 9
+    - 12
+data_folder: "data"
+output_folder: 'smpl_debug'
+prior_folder: 'priors'
+model_folder: 'models'
+result_folder: 'results'
+gender: "neutral"
+model_type: 'smpl'
+# Flag for using the GPU
+use_cuda: True
+float_dtype: "float32"
+use_joints_conf: True
+use_pca: True
+use_hands: False
+use_face: False
+flat_hand_mean: False
+# The number of mixture components for the pose prior
+num_gaussians: 8
+body_prior_type: 'l2'
+left_hand_prior_type: l2
+right_hand_prior_type: l2
+focal_length: 5000
+num_pca_comps: 12
+# The constant for the robust loss function
+rho: 100
+interpenetration: True
+df_cone_height: 0.0001
+# Upper arms and Spine 2
+# Neck and jaw
+ign_part_pairs: ["9,16", "9,17", "6,16", "6,17", "1,2", "12,22"]
+penalize_outside: True
+max_collisions: 128
+# LBFGS with line search
+optim_type: 'lbfgsls'
+ftol: 1e-9
+gtol: 1e-9
+lr: 1.0
+# Max number of optimization iterations
+maxiters: 30
+interactive: True
+visualize: False
+
+data_weights:
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+body_pose_prior_weights:
+    - 4.04e2
+    - 4.04e2
+    - 57.4e0
+    - 4.78e0
+coll_loss_weights:
+    - 0.0
+    - 0.0
+    - 0.01
+    - 1.0
+shape_weights:
+    - 1.0e2
+    - 5.0e1
+    - 1.0e1
+    - 0.5e1
+use_vposer: True
+vposer_ckpt: "vposer"
