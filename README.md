@@ -111,7 +111,8 @@ The LBFGS optimizer with Strong Wolfe Line search is taken from this [Pytorch pu
 We will update the repository once the pull request is merged.
 
 ## Contact
-The code of this repository was implemented by [Vassilis Choutas](vassilis.choutas@tuebingen.mpg.de).
+The code of this repository was implemented by [Vassilis Choutas](vassilis.choutas@tuebingen.mpg.de) and
+[Georgios Pavlakos](pavlakos@seas.upenn.edu).
 
 For questions, please contact [smplx@tue.mpg.de](smplx@tue.mpg.de). 
 
