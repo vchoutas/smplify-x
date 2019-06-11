@@ -24,26 +24,57 @@ import os
 import os.path as osp
 import argparse
 
-import tqdm
+import time
+import trimesh
+from mesh_viewer import MeshViewer
+
 
 try:
     input = raw_input
 except NameError:
     pass
 
-import trimesh
-from fitting import MeshViewer
+
+def quit_viewer(viewer):
+    global close
+    close = True
+
+
+class CounterObject(object):
+    def __init__(self, mesh_fns, verbose=False):
+        self.mesh_fns = mesh_fns
+        self.idx = 0
+        self.verbose = verbose
+
+    def next_mesh(self, viewer):
+        self.idx += 1
+        self.idx = self.idx % len(self.mesh_fns)
+
+        if verbose:
+            print('Loading {} ...'.format(mesh_fn))
+
+    def prev_mesh(self, viewer):
+        self.idx -= 1
+        self.idx = self.idx % len(self.mesh_fns)
+        if verbose:
+            print('Loading {} ...'.format(mesh_fn))
+
+    def get_mesh_fn(self):
+        return self.mesh_fns[self.idx]
+
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--mesh_fns', required=True,
                     type=str, help='The name of the result file',
                     nargs='*')
+parser.add_argument('--verbose', required=True, action='store_true',
+                    help='Verbosity flag')
 
 args = parser.parse_args()
 
 input_mesh_fns = args.mesh_fns
-
+verbose = args.verbose
 
 mesh_fns = []
 for mesh_fn in input_mesh_fns:
@@ -53,13 +84,30 @@ for mesh_fn in input_mesh_fns:
                      for fn in files if fn.endswith('.obj')]
     elif osp.isfile(mesh_fn):
         mesh_fns.append(mesh_fn)
+mesh_fns.sort()
 
-mv = MeshViewer()
+counter = CounterObject(mesh_fns)
+registered_keys = {'q': quit_viewer,
+                   '+': counter.next_mesh, '-': counter.prev_mesh}
+mv = MeshViewer(registered_keys=registered_keys)
 
-for mesh_fn in tqdm.tqdm(sorted(mesh_fns)):
+print('Press q to exit')
+print('Press + to open next mesh')
+print('Press - to open previous mesh')
+
+close = False
+while True:
+    if not mv.is_active():
+        break
+    if close:
+        break
+
+    mesh_fn = counter.get_mesh_fn()
+    #  if prev_idx == idx:
+    #  continue
     out_mesh = trimesh.load(mesh_fn)
 
     mv.update_mesh(out_mesh.vertices, out_mesh.faces)
-    input('Press any key to continue')
+    time.sleep(0.1)
 
 mv.close_viewer()
