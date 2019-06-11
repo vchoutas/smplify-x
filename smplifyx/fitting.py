@@ -29,6 +29,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from mesh_viewer import MeshViewer
 import utils
 
 
@@ -103,67 +104,6 @@ def guess_init(model,
     return init_t
 
 
-class MeshViewer(object):
-
-    def __init__(self, width=1200, height=800,
-                 body_color=(1.0, 1.0, 0.9, 1.0)):
-        super(MeshViewer, self).__init__()
-
-        import trimesh
-        import pyrender
-
-        self.mat_constructor = pyrender.MetallicRoughnessMaterial
-        self.mesh_constructor = trimesh.Trimesh
-        self.trimesh_to_pymesh = pyrender.Mesh.from_trimesh
-
-        self.body_color = body_color
-        self.scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 1.0],
-                                    ambient_light=(0.3, 0.3, 0.3))
-
-        pc = pyrender.PerspectiveCamera(yfov=np.pi / 3.0,
-                                        aspectRatio=float(width) / height)
-        camera_pose = np.eye(4)
-        camera_pose[:3, 3] = np.array([0, 0, 3])
-        self.scene.add(pc, pose=camera_pose)
-
-        self.viewer = pyrender.Viewer(self.scene, use_raymond_lighting=True,
-                                      viewport_size=(width, height),
-                                      cull_faces=False,
-                                      run_in_thread=True,
-                                      registered_keys=None)
-
-    def close_viewer(self):
-        if self.viewer.is_active:
-            self.viewer.close_external()
-
-    def create_mesh(self, vertices, faces, color=(0.3, 0.3, 0.3, 1.0),
-                    wireframe=False):
-
-        material = self.mat_constructor(
-            metallicFactor=0.0,
-            alphaMode='BLEND',
-            baseColorFactor=color)
-        return self.trimesh_to_pymesh(
-            self.mesh_constructor(vertices, faces),
-            material=material)
-
-    def update_mesh(self, vertices, faces):
-        if not self.viewer.is_active:
-            return
-
-        self.viewer.render_lock.acquire()
-
-        for node in self.scene.get_nodes():
-            if node.name == 'body_mesh':
-                self.scene.remove_node(node)
-                break
-
-        body_mesh = self.create_mesh(
-            vertices, faces, color=self.body_color)
-        self.scene.add(body_mesh, name='body_mesh')
-
-        self.viewer.render_lock.release()
-
 
 class FittingMonitor(object):
     def __init__(self, summary_steps=1, visualize=False,
@@ -179,10 +119,6 @@ class FittingMonitor(object):
         self.visualize = visualize
         self.summary_steps = summary_steps
         self.body_color = body_color
-        #  if self.visualize:
-        #  self.mv = MeshViewer(body_color=body_color)
-
-        #  self.steps = 0
 
     def __enter__(self):
         self.steps = 0
