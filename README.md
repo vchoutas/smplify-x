@@ -20,6 +20,14 @@
 Software Copyright License for **non-commercial scientific research purposes**.
 Please read carefully the [terms and conditions](https://github.com/vchoutas/smplx/blob/master/LICENSE) and any accompanying documentation before you download and/or use the SMPL-X/SMPLify-X model, data and software, (the "Model & Software"), including 3D meshes, blend weights, blend shapes, textures, software, scripts, and animations. By downloading and/or using the Model & Software (including downloading, cloning, installing, and any other use of this github repository), you acknowledge that you have read these terms and conditions, understand them, and agree to be bound by them. If you do not agree with these terms and conditions, you must not download and/or use the Model & Software. Any infringement of the terms of this agreement will automatically terminate your rights under this [License](./LICENSE).
 
+## Disclaimer
+
+The original images used for the figures 1 and 2 of the paper can be found in this link. 
+The images in the paper are used under license from gettyimages.com.
+We have acquired the right to use them in the publication, but redistribution is not allowed.
+Please follow the instructions on the given link to acquire right of usage.
+Our results are obtained on the 483 × 724 pixels resolution of the original images.
+
 ## Description
 
 This repository contains the fitting code used for the experiments in [Expressive Body Capture: 3D Hands, Face, and Body from a Single Image](https://smpl-x.is.tue.mpg.de/).
