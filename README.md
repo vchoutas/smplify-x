@@ -1,17 +1,21 @@
 ## Expressive Body Capture: 3D Hands, Face, and Body from a Single Image
 
-[[Paper Page](https://smpl-x.is.tue.mpg.de/)] [[Paper](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/497/SMPL-X.pdf)]
+[[Paper Page](https://smpl-x.is.tue.mpg.de/)] 
+[[Project Page]](https://ps.is.tuebingen.mpg.de/publications/smplex-2019)
+[[Paper](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/497/SMPL-X.pdf)]
 [[Supp. Mat.](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/498/SMPL-X-supp.pdf)]
 
 ![SMPL-X Examples](./images/teaser_fig.png)
 
-
 ## Table of Contents
   * [License](#license)
   * [Description](#description)
+    * [Fitting](#fitting)
+    * [Different Body Models](#different-body-models)
   * [Dependencies](#dependencies)
   * [Example](#example)
   * [Citation](#citation)
+  * [Acknowledgments](#acknowledgments)
   * [Contact](#contact)
 
 
@@ -22,8 +26,11 @@ Please read carefully the [terms and conditions](https://github.com/vchoutas/smp
 
 ## Description
 
+
 This repository contains the fitting code used for the experiments in [Expressive Body Capture: 3D Hands, Face, and Body from a Single Image](https://smpl-x.is.tue.mpg.de/).
-A sample command for executing the code is:
+
+### Fitting 
+Run the following command to execute the code:
 ```Shell
 python smplifyx/main.py --config cfg_files/fit_smplx.yaml 
     --data_folder DATA_FOLDER 
@@ -36,7 +43,37 @@ where the `DATA_FOLDER` should contain two subfolders, *images*, where the
 images are located, and *keypoints*, where the OpenPose output should be
 stored.
 
+### Different Body Models
+
+To fit [SMPL](http://smpl.is.tue.mpg.de/) or [SMPL+H](http://mano.is.tue.mpg.de), replace the *yaml* configuration file 
+with either *fit_smpl.yaml* or *fit_smplx.yaml*, i.e.:
+ * for SMPL:
+ ```Shell
+ python smplifyx/main.py --config cfg_files/fit_smpl.yaml 
+    --data_folder DATA_FOLDER 
+    --output_folder OUTPUT_FOLDER 
+    --visualize="True/False"
+    --model_folder MODEL_FOLDER
+    --vposer_ckpt VPOSER_FOLDER
+ ```
+  * for SMPL+H:
+ ```Shell
+ python smplifyx/main.py --config cfg_files/fit_smplh.yaml 
+    --data_folder DATA_FOLDER 
+    --output_folder OUTPUT_FOLDER 
+    --visualize="True/False"
+    --model_folder MODEL_FOLDER
+    --vposer_ckpt VPOSER_FOLDER
+ ```
  
+### Visualization 
+
+To visualize the results produced by the method you can run the following script:
+```Shell
+python smplifyx/render_results.py --mesh_fns OUTPUT_MESH_FOLDER
+```
+where *OUTPUT_MESH_FOLDER* is the folder w
+
 ## Dependencies
 
 Follow the installation instructions for each of the following before using the
@@ -65,6 +102,17 @@ If you find this Model & Software useful in your research we would kindly ask yo
 }
 ```
 
-## Contact
+## Acknowledgments
 
-For questions about our paper or code, please contact [Vassilis Choutas](vassilis.choutas@tuebingen.mpg.de).
+### LBFGS with Strong Wolfe Line Search
+
+The LBFGS optimizer with Strong Wolfe Line search is taken from this [Pytorch pull request](https://github.com/pytorch/pytorch/pull/8824). Special thanks to 
+[Du Phan](https://github.com/fehiepsi) for implementing this. 
+We will update the repository once the pull request is merged.
+
+## Contact
+The code of this repository was implemented by [Vassilis Choutas](vassilis.choutas@tuebingen.mpg.de).
+
+For questions, please contact [smplx@tue.mpg.de](smplx@tue.mpg.de). 
+
+For commercial licensing, please contact [ps-licensing@tue.mpg.de](ps-licensing@tue.mpg.de).
