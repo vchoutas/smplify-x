@@ -1,3 +1,9 @@
 numpy>=1.16.2
 torch>=1.0.1.post2
 torchgeometry>=0.1.2
+PyYAML==5.1.1
+smplx
+pillow
+opencv-python
+tqdm
+human_body_prior
