@@ -42,6 +42,7 @@ def guess_init(model,
                vposer=None,
                use_vposer=True,
                dtype=torch.float32,
+               model_type='smpl',
                **kwargs):
     ''' Initializes the camera translation vector
 
@@ -72,6 +73,11 @@ def guess_init(model,
 
     body_pose = vposer.decode(
         pose_embedding, output_type='aa').view(1, -1) if use_vposer else None
+    if use_vposer and model_type == 'smpl':
+        wrist_pose = torch.zeros([body_pose.shape[0], 6],
+                                 dtype=body_pose.dtype,
+                                 device=body_pose.device)
+        body_pose = torch.cat([body_pose, wrist_pose], dim=1)
 
     output = model(body_pose=body_pose, return_verts=False,
                    return_full_pose=False)
@@ -104,11 +110,11 @@ def guess_init(model,
     return init_t
 
 
-
 class FittingMonitor(object):
     def __init__(self, summary_steps=1, visualize=False,
                  maxiters=100, ftol=2e-09, gtol=1e-05,
                  body_color=(1.0, 1.0, 0.9, 1.0),
+                 model_type='smpl',
                  **kwargs):
         super(FittingMonitor, self).__init__()
 
@@ -119,6 +125,8 @@ class FittingMonitor(object):
         self.visualize = visualize
         self.summary_steps = summary_steps
         self.body_color = body_color
+        self.model_type = model_type
+
 
     def __enter__(self):
         self.steps = 0
@@ -154,11 +162,12 @@ class FittingMonitor(object):
                   the maximum absolute values of the all gradient tensors are less
                   than this, then the process will stop
         '''
+        append_wrists = self.model_type == 'smpl' and use_vposer
         prev_loss = None
         for n in range(self.maxiters):
             loss = optimizer.step(closure)
 
-            if torch.isnan(loss).sum() > 0 :
+            if torch.isnan(loss).sum() > 0:
                 print('NaN loss value, stopping!')
                 break
 
@@ -180,6 +189,12 @@ class FittingMonitor(object):
                 body_pose = vposer.decode(
                     pose_embedding, output_type='aa').view(
                         1, -1) if use_vposer else None
+
+                if append_wrists:
+                    wrist_pose = torch.zeros([body_pose.shape[0], 6],
+                                             dtype=body_pose.dtype,
+                                             device=body_pose.device)
+                    body_pose = torch.cat([body_pose, wrist_pose], dim=1)
                 model_output = body_model(
                     return_verts=True, body_pose=body_pose)
                 vertices = model_output.vertices.detach().cpu().numpy()
@@ -202,6 +217,7 @@ class FittingMonitor(object):
                                create_graph=False,
                                **kwargs):
         faces_tensor = body_model.faces_tensor.view(-1)
+        append_wrists = self.model_type == 'smpl' and use_vposer
 
         def fitting_func(backward=True):
             if backward:
@@ -210,6 +226,12 @@ class FittingMonitor(object):
             body_pose = vposer.decode(
                 pose_embedding, output_type='aa').view(
                     1, -1) if use_vposer else None
+
+            if append_wrists:
+                wrist_pose = torch.zeros([body_pose.shape[0], 6],
+                                         dtype=body_pose.dtype,
+                                         device=body_pose.device)
+                body_pose = torch.cat([body_pose, wrist_pose], dim=1)
 
             body_model_output = body_model(return_verts=return_verts,
                                            body_pose=body_pose,
@@ -423,7 +445,9 @@ class SMPLifyLoss(nn.Module):
 class SMPLifyCameraInitLoss(nn.Module):
 
     def __init__(self, init_joints_idxs, trans_estimation=None,
-                 reduction='sum', depth_loss_weight=1e2, dtype=torch.float32,
+                 reduction='sum',
+                 data_weight=1.0,
+                 depth_loss_weight=1e2, dtype=torch.float32,
                  **kwargs):
         super(SMPLifyCameraInitLoss, self).__init__()
         self.dtype = dtype
@@ -434,6 +458,8 @@ class SMPLifyCameraInitLoss(nn.Module):
         else:
             self.trans_estimation = trans_estimation
 
+        self.register_buffer('data_weight',
+                             torch.tensor(data_weight, dtype=dtype))
         self.register_buffer('init_joints_idxs',
                              torch.tensor(init_joints_idxs, dtype=torch.long))
         self.register_buffer('depth_loss_weight',
@@ -457,7 +483,7 @@ class SMPLifyCameraInitLoss(nn.Module):
             torch.index_select(gt_joints, 1, self.init_joints_idxs) -
             torch.index_select(projected_joints, 1, self.init_joints_idxs),
             2)
-        joint_loss = torch.sum(joint_error)
+        joint_loss = torch.sum(joint_error) * self.data_weight ** 2
 
         depth_loss = 0.0
         if (self.depth_loss_weight.item() > 0 and self.trans_estimation is not
