@@ -12,8 +12,8 @@
   * [Description](#description)
     * [Fitting](#fitting)
     * [Different Body Models](#different-body-models)
+    * [Visualizing Results](#visualizing-results)
   * [Dependencies](#dependencies)
-  * [Example](#example)
   * [Citation](#citation)
   * [Acknowledgments](#acknowledgments)
   * [Contact](#contact)
@@ -33,7 +33,6 @@ Please follow the instructions on the given link to acquire right of usage.
 Our results are obtained on the 483 × 724 pixels resolution of the original images.
 
 ## Description
-
 
 This repository contains the fitting code used for the experiments in [Expressive Body Capture: 3D Hands, Face, and Body from a Single Image](https://smpl-x.is.tue.mpg.de/).
 
@@ -74,13 +73,13 @@ with either *fit_smpl.yaml* or *fit_smplx.yaml*, i.e.:
     --vposer_ckpt VPOSER_FOLDER
  ```
  
-### Visualization 
+### Visualizing Results
 
 To visualize the results produced by the method you can run the following script:
 ```Shell
 python smplifyx/render_results.py --mesh_fns OUTPUT_MESH_FOLDER
 ```
-where *OUTPUT_MESH_FOLDER* is the folder w
+where *OUTPUT_MESH_FOLDER* is the folder that contains the resulting meshes.
 
 ## Dependencies
 
@@ -88,8 +87,9 @@ Follow the installation instructions for each of the following before using the
 fitting code.
 
 1. [PyTorch](https://pytorch.org/)
-2. [SMPL-X](https://github.com/MPI-IS/smplx)
+2. [SMPL-X](https://github.com/vchoutas/smplx)
 3. [V-Poser](https://github.com/nghorbani/HumanBodyPrior)
+4. [Homogenus](https://github.com/nghorbani/homogenus)
 
 ### Optional Dependencies
 
