@@ -29,38 +29,32 @@ import trimesh
 from mesh_viewer import MeshViewer
 
 
-try:
-    input = raw_input
-except NameError:
-    pass
-
-
-def quit_viewer(viewer):
-    global close
-    close = True
-
-
-class CounterObject(object):
+class KeyHandler(object):
     def __init__(self, mesh_fns, verbose=False):
         self.mesh_fns = mesh_fns
         self.idx = 0
         self.verbose = verbose
+        self.close = False
 
     def next_mesh(self, viewer):
         self.idx += 1
         self.idx = self.idx % len(self.mesh_fns)
 
-        if verbose:
-            print('Loading {} ...'.format(mesh_fn))
+        if self.verbose:
+            print('Loading {} ...'.format(self.mesh_fns[self.idx]))
 
     def prev_mesh(self, viewer):
         self.idx -= 1
         self.idx = self.idx % len(self.mesh_fns)
-        if verbose:
-            print('Loading {} ...'.format(mesh_fn))
+
+        if self.verbose:
+            print('Loading {} ...'.format(self.mesh_fns[self.idx]))
 
     def get_mesh_fn(self):
         return self.mesh_fns[self.idx]
+
+    def quit_viewer(self, viewer):
+        self.close = True
 
 
 parser = argparse.ArgumentParser()
@@ -86,9 +80,9 @@ for mesh_fn in input_mesh_fns:
         mesh_fns.append(mesh_fn)
 mesh_fns.sort()
 
-counter = CounterObject(mesh_fns)
-registered_keys = {'q': quit_viewer,
-                   '+': counter.next_mesh, '-': counter.prev_mesh}
+key_handler = KeyHandler(mesh_fns)
+registered_keys = {'q': key_handler.quit_viewer,
+                   '+': key_handler.next_mesh, '-': key_handler.prev_mesh}
 mv = MeshViewer(registered_keys=registered_keys)
 
 print('Press q to exit')
@@ -99,10 +93,10 @@ close = False
 while True:
     if not mv.is_active():
         break
-    if close:
+    if key_handler.close:
         break
 
-    mesh_fn = counter.get_mesh_fn()
+    mesh_fn = key_handler.get_mesh_fn()
     #  if prev_idx == idx:
     #  continue
     out_mesh = trimesh.load(mesh_fn)
