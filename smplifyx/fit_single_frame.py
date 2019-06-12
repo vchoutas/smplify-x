@@ -86,7 +86,6 @@ def fit_single_frame(img,
                      side_view_thsh=25.,
                      rho=100,
                      vposer_latent_dim=32,
-                     body_pose_param='vposer',
                      vposer_ckpt='',
                      use_joints_conf=False,
                      interactive=True,
@@ -184,7 +183,6 @@ def fit_single_frame(img,
 
         vposer_ckpt = osp.expandvars(vposer_ckpt)
         vposer, _ = load_vposer(vposer_ckpt, vp_model='snapshot')
-
         vposer = vposer.to(device=device)
         vposer.eval()
 
@@ -269,6 +267,7 @@ def fit_single_frame(img,
     init_t = fitting.guess_init(body_model, gt_joints, edge_indices,
                                 use_vposer=use_vposer, vposer=vposer,
                                 pose_embedding=pose_embedding,
+                                model_type=kwargs.get('model_type', 'smpl'),
                                 focal_length=focal_length, dtype=dtype)
 
     camera_loss = fitting.create_loss('camera_init',
@@ -306,6 +305,10 @@ def fit_single_frame(img,
         img = torch.tensor(img, dtype=dtype)
 
         H, W, _ = img.shape
+
+        data_weight = 1000 / H
+        # The closure passed to the optimizer
+        camera_loss.reset_loss_weights({'data_weight': data_weight})
 
         # Reset the parameters to estimate the initial translation of the
         # body model
@@ -407,6 +410,7 @@ def fit_single_frame(img,
                     **kwargs)
                 body_optimizer.zero_grad()
 
+                curr_weights['data_weight'] = data_weight
                 curr_weights['bending_prior_weight'] = (
                     3.17 * curr_weights['body_pose_weight'])
                 if use_hands:
@@ -476,10 +480,17 @@ def fit_single_frame(img,
             pickle.dump(results[min_idx]['result'], result_file, protocol=2)
 
     if interactive:
-        if use_vposer:
-            body_pose = vposer.decode(
-                pose_embedding,
-                output_type='aa').view(1, -1) if use_vposer else None
+        body_pose = vposer.decode(
+            pose_embedding,
+            output_type='aa').view(1, -1) if use_vposer else None
+
+        model_type = kwargs.get('model_type', 'smpl')
+        append_wrists = model_type == 'smpl' and use_vposer
+        if append_wrists:
+                wrist_pose = torch.zeros([body_pose.shape[0], 6],
+                                         dtype=body_pose.dtype,
+                                         device=body_pose.device)
+                body_pose = torch.cat([body_pose, wrist_pose], dim=1)
 
         model_output = body_model(return_verts=True, body_pose=body_pose)
         vertices = model_output.vertices.detach().cpu().numpy().squeeze()
