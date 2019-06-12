@@ -479,7 +479,7 @@ def fit_single_frame(img,
                 min_idx = 0
             pickle.dump(results[min_idx]['result'], result_file, protocol=2)
 
-    if interactive:
+    if visualize:
         body_pose = vposer.decode(
             pose_embedding,
             output_type='aa').view(1, -1) if use_vposer else None
