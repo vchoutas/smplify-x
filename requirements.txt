@@ -2,6 +2,7 @@ numpy>=1.16.2
 torch>=1.0.1.post2
 torchgeometry>=0.1.2
 PyYAML==5.1.1
+configargparse
 smplx
 pillow
 opencv-python
