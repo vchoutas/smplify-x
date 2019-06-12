@@ -110,9 +110,11 @@ def fit_single_frame(img,
     if body_pose_prior_weights is None:
         body_pose_prior_weights = [4.04 * 1e2, 4.04 * 1e2, 57.4, 4.78]
 
-    msg = ('Number of Body pose prior weights {} does not match the' +
-           ' number of data term weights {}'.format(
-               len(body_pose_prior_weights), len(data_weights)))
+    msg = (
+        'Number of Body pose prior weights {}'.format(
+            len(body_pose_prior_weights)) +
+        ' does not match the number of data term weights {}'.format(
+            len(data_weights)))
     assert (len(data_weights) ==
             len(body_pose_prior_weights)), msg
 
