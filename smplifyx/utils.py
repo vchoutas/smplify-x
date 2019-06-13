@@ -26,6 +26,13 @@ import torch
 import torch.nn as nn
 
 
+def to_tensor(tensor, dtype=torch.float32):
+    if torch.Tensor == type(tensor):
+        return tensor.clone().detach()
+    else:
+        return torch.tensor(tensor, dtype)
+
+
 def rel_change(prev_val, curr_val):
     return (prev_val - curr_val) / max([np.abs(prev_val), np.abs(curr_val), 1])
 
