@@ -39,6 +39,7 @@ class MeshViewer(object):
         self.mat_constructor = pyrender.MetallicRoughnessMaterial
         self.mesh_constructor = trimesh.Trimesh
         self.trimesh_to_pymesh = pyrender.Mesh.from_trimesh
+        self.transf = trimesh.transformations.rotation_matrix
 
         self.body_color = body_color
         self.scene = pyrender.Scene(bg_color=[0.0, 0.0, 0.0, 1.0],
@@ -70,9 +71,13 @@ class MeshViewer(object):
             metallicFactor=0.0,
             alphaMode='BLEND',
             baseColorFactor=color)
-        return self.trimesh_to_pymesh(
-            self.mesh_constructor(vertices, faces),
-            material=material)
+
+        mesh = self.mesh_constructor(vertices, faces)
+
+        rot = self.transf(np.radians(180), [1, 0, 0])
+        mesh.apply_transform(rot)
+
+        return self.trimesh_to_pymesh(mesh, material=material)
 
     def update_mesh(self, vertices, faces):
         if not self.viewer.is_active:
