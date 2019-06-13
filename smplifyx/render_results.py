@@ -62,7 +62,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--mesh_fns', required=True,
                     type=str, help='The name of the result file',
                     nargs='*')
-parser.add_argument('--verbose', required=True, action='store_true',
+parser.add_argument('--verbose', action='store_true',
                     help='Verbosity flag')
 
 args = parser.parse_args()
