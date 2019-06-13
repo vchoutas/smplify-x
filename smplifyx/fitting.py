@@ -127,7 +127,6 @@ class FittingMonitor(object):
         self.body_color = body_color
         self.model_type = model_type
 
-
     def __enter__(self):
         self.steps = 0
         if self.visualize:
@@ -453,15 +452,17 @@ class SMPLifyCameraInitLoss(nn.Module):
         self.dtype = dtype
 
         if trans_estimation is not None:
-            self.register_buffer('trans_estimation',
-                                 torch.tensor(trans_estimation, dtype=dtype))
+            self.register_buffer(
+                'trans_estimation',
+                utils.to_tensor(trans_estimation, dtype=dtype))
         else:
             self.trans_estimation = trans_estimation
 
         self.register_buffer('data_weight',
                              torch.tensor(data_weight, dtype=dtype))
-        self.register_buffer('init_joints_idxs',
-                             torch.tensor(init_joints_idxs, dtype=torch.long))
+        self.register_buffer(
+            'init_joints_idxs',
+            utils.to_tensor(init_joints_idxs, dtype=torch.long))
         self.register_buffer('depth_loss_weight',
                              torch.tensor(depth_loss_weight, dtype=dtype))
 
