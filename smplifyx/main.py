@@ -203,6 +203,7 @@ def main(**args):
         img = data['img']
         fn = data['fn']
         keypoints = data['keypoints']
+        print('Processing: {}'.format(data['img_path']))
 
         curr_result_folder = osp.join(result_folder, fn)
         if not osp.exists(curr_result_folder):

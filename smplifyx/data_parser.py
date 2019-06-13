@@ -188,7 +188,9 @@ class OpenPose(Dataset):
             return {}
         keypoints = np.stack(keyp_tuple.keypoints)
 
-        output_dict = {'fn': img_fn, 'keypoints': keypoints, 'img': img}
+        output_dict = {'fn': img_fn,
+                       'img_path': img_path,
+                       'keypoints': keypoints, 'img': img}
         if keyp_tuple.gender_gt is not None:
             if len(keyp_tuple.gender_gt) > 0:
                 output_dict['gender_gt'] = keyp_tuple.gender_gt
