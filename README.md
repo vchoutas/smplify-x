@@ -1,7 +1,6 @@
 ## Expressive Body Capture: 3D Hands, Face, and Body from a Single Image
 
 [[Paper Page](https://smpl-x.is.tue.mpg.de/)] 
-[[Project Page]](https://ps.is.tuebingen.mpg.de/publications/smplex-2019)
 [[Paper](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/497/SMPL-X.pdf)]
 [[Supp. Mat.](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/498/SMPL-X-supp.pdf)]
 
