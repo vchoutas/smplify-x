@@ -93,7 +93,7 @@ fitting code.
 
 ### Optional Dependencies
 
-1. [PyTorch Mesh self-intersection](https://github.com/MPI-IS/torch-mesh-isect) for interpenetration penalty
+1. [PyTorch Mesh self-intersection](https://github.com/vchoutas/torch-mesh-isect) for interpenetration penalty
 1. [Trimesh](https://trimsh.org/) for loading triangular meshes
 1. [Pyrender](https://pyrender.readthedocs.io/) for visualization
 
