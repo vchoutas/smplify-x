@@ -87,7 +87,7 @@ fitting code.
 
 1. [PyTorch](https://pytorch.org/)
 2. [SMPL-X](https://github.com/vchoutas/smplx)
-3. [V-Poser](https://github.com/nghorbani/HumanBodyPrior)
+3. [VPoser](https://github.com/nghorbani/HumanBodyPrior)
 4. [Homogenus](https://github.com/nghorbani/homogenus)
 
 ### Optional Dependencies
