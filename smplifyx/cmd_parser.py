@@ -49,6 +49,10 @@ def parse_config(argv=None):
                         type=lambda arg: arg.lower() == 'true',
                         default=False,
                         help='Print info messages during the process')
+    parser.add_argument('--save_meshes',
+                        type=lambda arg: arg.lower() == 'true',
+                        default=True,
+                        help='Save final output meshes')
     parser.add_argument('--visualize',
                         type=lambda arg: arg.lower() == 'true',
                         default=False,

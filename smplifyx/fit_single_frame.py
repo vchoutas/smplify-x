@@ -90,6 +90,7 @@ def fit_single_frame(img,
                      use_joints_conf=False,
                      interactive=True,
                      visualize=False,
+                     save_meshes=True,
                      degrees=None,
                      batch_size=1,
                      dtype=torch.float32,
@@ -481,7 +482,7 @@ def fit_single_frame(img,
                 min_idx = 0
             pickle.dump(results[min_idx]['result'], result_file, protocol=2)
 
-    if visualize:
+    if save_meshes or visualize:
         body_pose = vposer.decode(
             pose_embedding,
             output_type='aa').view(1, -1) if use_vposer else None
@@ -497,15 +498,16 @@ def fit_single_frame(img,
         model_output = body_model(return_verts=True, body_pose=body_pose)
         vertices = model_output.vertices.detach().cpu().numpy().squeeze()
 
-        import pyrender
         import trimesh
 
         out_mesh = trimesh.Trimesh(vertices, body_model.faces)
         rot = trimesh.transformations.rotation_matrix(
             np.radians(180), [1, 0, 0])
         out_mesh.apply_transform(rot)
-
         out_mesh.export(mesh_fn)
+
+    if visualize:
+        import pyrender
 
         material = pyrender.MetallicRoughnessMaterial(
             metallicFactor=0.0,
