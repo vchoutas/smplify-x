@@ -148,18 +148,26 @@ class FittingMonitor(object):
                     use_vposer=True, pose_embedding=None, vposer=None,
                     **kwargs):
         ''' Helper function for running an optimization process
-            Args:
-                - optimizer: The PyTorch optimizer object
-                - closure: The function used to calculate the gradients
-                - params: a list containing the parameters that will be optimized
-            Keyword arguments:
-                - maxiters (100): The maximum number of iterations for the
-                  optimizer
-                - ftol: The tolerance for the relative change in the loss function.
-                  If it is lower than this value, then the process stops
-                - gtol: The tolerance for the maximum change in the gradient. If
-                  the maximum absolute values of the all gradient tensors are less
-                  than this, then the process will stop
+            Parameters
+            ----------
+                optimizer: torch.optim.Optimizer
+                    The PyTorch optimizer object
+                closure: function
+                    The function used to calculate the gradients
+                params: list
+                    List containing the parameters that will be optimized
+                body_model: nn.Module
+                    The body model PyTorch module
+                use_vposer: bool
+                    Flag on whether to use VPoser (default=True).
+                pose_embedding: torch.tensor, BxN
+                    The tensor that contains the latent pose variable.
+                vposer: nn.Module
+                    The VPoser module
+            Returns
+            -------
+                loss: float
+                The final loss value
         '''
         append_wrists = self.model_type == 'smpl' and use_vposer
         prev_loss = None
