@@ -36,6 +36,7 @@ python smplifyx/main.py --config cfg_files/fit_smplx.yaml
     --visualize="True/False"
     --model_folder MODEL_FOLDER
     --vposer_ckpt VPOSER_FOLDER
+    --part_segm_fn smplx_parts_segm.pkl
 ```
 where the `DATA_FOLDER` should contain two subfolders, *images*, where the
 images are located, and *keypoints*, where the OpenPose output should be
@@ -85,7 +86,7 @@ fitting code.
 ### Optional Dependencies
 
 1. [PyTorch Mesh self-intersection](https://github.com/vchoutas/torch-mesh-isect) for interpenetration penalty 
-   * Download the per-triangle part segmentation [here](https://owncloud.tuebingen.mpg.de/index.php/s/T9BHBLyQjmSjnA9)
+   * Download the per-triangle part segmentation [here](https://owncloud.tuebingen.mpg.de/index.php/s/MWnr8Kso4K8T8at)
 1. [Trimesh](https://trimsh.org/) for loading triangular meshes
 1. [Pyrender](https://pyrender.readthedocs.io/) for visualization
 

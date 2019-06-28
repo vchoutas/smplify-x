@@ -100,7 +100,6 @@ class L2Prior(nn.Module):
 class MaxMixturePrior(nn.Module):
 
     def __init__(self, prior_folder='prior',
-                 use_body=True, use_left_hand=False, use_right_hand=False,
                  num_gaussians=6, dtype=DEFAULT_DTYPE, epsilon=1e-16,
                  use_merged=True,
                  **kwargs):
@@ -117,12 +116,8 @@ class MaxMixturePrior(nn.Module):
         self.num_gaussians = num_gaussians
         self.epsilon = epsilon
         self.use_merged = use_merged
-        if use_body:
-            gmm_fn = 'gmm_{:02d}.pkl'.format(num_gaussians)
-        if use_left_hand:
-            gmm_fn = 'gmm_left_{:02d}.pkl'.format(num_gaussians)
-        if use_right_hand:
-            gmm_fn = 'gmm_right_{:02d}.pkl'.format(num_gaussians)
+        gmm_fn = 'gmm_{:02d}.pkl'.format(num_gaussians)
+
         full_gmm_fn = os.path.join(prior_folder, gmm_fn)
         if not os.path.exists(full_gmm_fn):
             print('The path to the mixture prior "{}"'.format(full_gmm_fn) +
