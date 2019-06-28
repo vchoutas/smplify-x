@@ -1,6 +1,6 @@
 ## Expressive Body Capture: 3D Hands, Face, and Body from a Single Image
 
-[[Paper Page](https://smpl-x.is.tue.mpg.de/)] 
+[[Project Page](https://smpl-x.is.tue.mpg.de/)] 
 [[Paper](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/497/SMPL-X.pdf)]
 [[Supp. Mat.](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/498/SMPL-X-supp.pdf)]
 
@@ -84,11 +84,12 @@ fitting code.
 
 ### Optional Dependencies
 
-1. [PyTorch Mesh self-intersection](https://github.com/vchoutas/torch-mesh-isect) for interpenetration penalty
+1. [PyTorch Mesh self-intersection](https://github.com/vchoutas/torch-mesh-isect) for interpenetration penalty 
+   * Download the per-triangle part segmentation [here](https://owncloud.tuebingen.mpg.de/index.php/s/T9BHBLyQjmSjnA9)
 1. [Trimesh](https://trimsh.org/) for loading triangular meshes
 1. [Pyrender](https://pyrender.readthedocs.io/) for visualization
 
-The code has been tested with Python 3.6, CUDA 10, CuDNN 7.3 and PyTorch 1.0. 
+The code has been tested with Python 3.6, CUDA 10, CuDNN 7.3 and PyTorch 1.0 on Ubuntu 18.04. 
 
 ## Citation
 
