@@ -127,4 +127,4 @@ The code of this repository was implemented by [Vassilis Choutas](vassilis.chout
 
 For questions, please contact [smplx@tue.mpg.de](smplx@tue.mpg.de). 
 
-For commercial licensing, please contact [ps-licensing@tue.mpg.de](ps-licensing@tue.mpg.de).
+For commercial licensing (and related questions), please contact [ps-licensing@tue.mpg.de](ps-licensing@tue.mpg.de).
