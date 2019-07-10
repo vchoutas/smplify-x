@@ -92,7 +92,7 @@ def read_keypoints(keypoint_fn, use_hands=True, use_face=True,
         if 'gender_pd' in person_data:
             gender_pd.append(person_data['gender_pd'])
         if 'gender_gt' in person_data:
-            gender_pd.append(person_data['gender_gt'])
+            gender_gt.append(person_data['gender_gt'])
 
         keypoints.append(body_keypoints)
 
