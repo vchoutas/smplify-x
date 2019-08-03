@@ -500,7 +500,7 @@ def fit_single_frame(img,
 
         import trimesh
 
-        out_mesh = trimesh.Trimesh(vertices, body_model.faces)
+        out_mesh = trimesh.Trimesh(vertices, body_model.faces, process=False)
         rot = trimesh.transformations.rotation_matrix(
             np.radians(180), [1, 0, 0])
         out_mesh.apply_transform(rot)
