@@ -98,7 +98,7 @@ fitting code.
 1. [Trimesh](https://trimsh.org/) for loading triangular meshes
 1. [Pyrender](https://pyrender.readthedocs.io/) for visualization
 
-The code has been tested with Python 3.6, CUDA 10, CuDNN 7.3 and PyTorch 1.0 on Ubuntu 18.04. 
+The code has been tested with Python 3.6, CUDA 10.0, CuDNN 7.3 and PyTorch 1.0 on Ubuntu 18.04. 
 
 ## Citation
 
