@@ -25,7 +25,7 @@ Please read carefully the [terms and conditions](https://github.com/vchoutas/smp
 
 ## Disclaimer
 
-The original images used for the figures 1 and 2 of the paper can be found in this link. 
+The original images used for the figures 1 and 2 of the paper can be found in [this link](https://www.gettyimages.de/search/stack/546047069#). 
 The images in the paper are used under license from gettyimages.com.
 We have acquired the right to use them in the publication, but redistribution is not allowed.
 Please follow the instructions on the given link to acquire right of usage.
