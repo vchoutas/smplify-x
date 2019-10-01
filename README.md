@@ -94,7 +94,7 @@ fitting code.
 ### Optional Dependencies
 
 1. [PyTorch Mesh self-intersection](https://github.com/vchoutas/torch-mesh-isect) for interpenetration penalty 
-   * Download the per-triangle part segmentation [here](https://owncloud.tuebingen.mpg.de/index.php/s/MWnr8Kso4K8T8at)
+   * Download the per-triangle part segmentation: [smplx_parts_segm.pkl](https://owncloud.tuebingen.mpg.de/index.php/s/MWnr8Kso4K8T8at)
 1. [Trimesh](https://trimsh.org/) for loading triangular meshes
 1. [Pyrender](https://pyrender.readthedocs.io/) for visualization
 
@@ -122,9 +122,9 @@ The LBFGS optimizer with Strong Wolfe Line search is taken from this [Pytorch pu
 We will update the repository once the pull request is merged.
 
 ## Contact
-The code of this repository was implemented by [Vassilis Choutas](vassilis.choutas@tuebingen.mpg.de) and
-[Georgios Pavlakos](pavlakos@seas.upenn.edu).
+The code of this repository was implemented by [Vassilis Choutas](mailto:vassilis.choutas@tuebingen.mpg.de) and
+[Georgios Pavlakos](mailto:pavlakos@seas.upenn.edu).
 
-For questions, please contact [smplx@tue.mpg.de](smplx@tue.mpg.de). 
+For questions, please contact [smplx@tue.mpg.de](mailto:smplx@tue.mpg.de). 
 
-For commercial licensing (and all related questions for business applications), please contact [ps-licensing@tue.mpg.de](ps-licensing@tue.mpg.de).
+For commercial licensing (and all related questions for business applications), please contact [ps-licensing@tue.mpg.de](mailto:ps-licensing@tue.mpg.de).
