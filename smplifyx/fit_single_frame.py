@@ -417,9 +417,9 @@ def fit_single_frame(img,
                 curr_weights['bending_prior_weight'] = (
                     3.17 * curr_weights['body_pose_weight'])
                 if use_hands:
-                    joint_weights[:, 25:76] = curr_weights['hand_weight']
+                    joint_weights[:, 25:67] = curr_weights['hand_weight']
                 if use_face:
-                    joint_weights[:, 76:] = curr_weights['face_weight']
+                    joint_weights[:, 67:] = curr_weights['face_weight']
                 loss.reset_loss_weights(curr_weights)
 
                 closure = monitor.create_fitting_closure(
