@@ -58,6 +58,7 @@ def parse_config(argv=None):
                         default=False,
                         help='Display plots while running the optimization')
     parser.add_argument('--degrees', type=float, default=[0, 90, 180, 270],
+                        nargs='*',
                         help='Degrees of rotation for rendering the final' +
                         ' result')
     parser.add_argument('--use_cuda',
@@ -166,9 +167,9 @@ def parse_config(argv=None):
     parser.add_argument('--init_joints_idxs', nargs='*', type=int,
                         default=[9, 12, 2, 5],
                         help='Which joints to use for initializing the camera')
-    parser.add_argument('--body_tri_idxs', default='5.12,2.9',
-                        type=lambda x: [list(map(int, pair.split('.')))
-                                        for pair in x.split(',')],
+    parser.add_argument('--body_tri_idxs', nargs='*',
+                        #  default='5.12,2.9',
+                        type=list,
                         help='The indices of the joints used to estimate' +
                         ' the initial depth of the camera. The format' +
                         ' should be vIdx1.vIdx2,vIdx3.vIdx4')
@@ -278,6 +279,6 @@ def parse_config(argv=None):
     parser.add_argument('--maxiters', type=int, default=100,
                         help='The maximum iterations for the optimization')
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     args_dict = vars(args)
     return args_dict
