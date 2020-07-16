@@ -10,8 +10,7 @@
 #
 # Copyright©2019 Max-Planck-Gesellschaft zur Förderung
 # der Wissenschaften e.V. (MPG). acting on behalf of its Max Planck Institute
-# for Intelligent Systems and the Max Planck Institute for Biological
-# Cybernetics. All rights reserved.
+# for Intelligent Systems. All rights reserved.
 #
 # Contact: ps-license@tuebingen.mpg.de
 
@@ -169,10 +168,11 @@ def parse_config(argv=None):
                         help='Which joints to use for initializing the camera')
     parser.add_argument('--body_tri_idxs', nargs='*',
                         #  default='5.12,2.9',
-                        type=list,
+                        default=[5, 12, 2, 9],
+                        type=int,
                         help='The indices of the joints used to estimate' +
                         ' the initial depth of the camera. The format' +
-                        ' should be vIdx1.vIdx2,vIdx3.vIdx4')
+                        ' should be vIdx1 vIdx2 vIdx3 vIdx4')
 
     parser.add_argument('--prior_folder', type=str, default='prior',
                         help='The folder where the prior is stored')
@@ -280,5 +280,17 @@ def parse_config(argv=None):
                         help='The maximum iterations for the optimization')
 
     args = parser.parse_args(argv)
+
     args_dict = vars(args)
+
+    assert len(args_dict['body_tri_idxs']) % 2 == 0, (
+        'Number of body_tri_idxs arguments must be divisble by 2.'
+        f' Got: {len(args_dict["body_tri_idxs"])}'
+    )
+    num_tri_idxs = len(args_dict['body_tri_idxs'])
+    # Convert the list of indices to a list of pairs
+    args_dict['body_tri_idxs'] = [
+        (args_dict['body_tri_idxs'][ii], args_dict['body_tri_idxs'][jj])
+        for ii, jj in zip(range(0, num_tri_idxs, 2), range(1, num_tri_idxs, 2))
+    ]
     return args_dict
