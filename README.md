@@ -100,6 +100,10 @@ fitting code.
 
 The code has been tested with Python 3.6, CUDA 10.0, CuDNN 7.3 and PyTorch 1.0 on Ubuntu 18.04. 
 
+### Workaround for overlaying mesh on image without GPU
+
+[Code](https://github.com/Anirudh257/Render-SMPL-X-mesh-on-system-without-GPU)
+
 ## Citation
 
 If you find this Model & Software useful in your research we would kindly ask you to cite:
