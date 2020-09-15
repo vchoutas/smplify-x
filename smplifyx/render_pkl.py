@@ -47,6 +47,8 @@ if __name__ == '__main__':
     else:
         device = torch.device('cpu')
 
+    model_type = args.get('model_type', 'smplx')
+    print('Model type:', model_type)
     print(args.get('model_folder'))
     model_params = dict(model_path=args.get('model_folder'),
                         #  joint_mapper=joint_mapper,
@@ -91,8 +93,14 @@ if __name__ == '__main__':
         est_params = {}
         for key, val in data.items():
             if key == 'body_pose' and use_vposer:
-                est_params['body_pose'] = vposer.decode(
+                body_pose = vposer.decode(
                     pose_embedding, output_type='aa').view(1, -1)
+                if model_type == 'smpl':
+                    wrist_pose = torch.zeros([body_pose.shape[0], 6],
+                                             dtype=body_pose.dtype,
+                                             device=body_pose.device)
+                    body_pose = torch.cat([body_pose, wrist_pose], dim=1)
+                est_params['body_pose'] = body_pose
             else:
                 est_params[key] = torch.tensor(val, dtype=dtype, device=device)
 
