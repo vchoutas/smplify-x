@@ -107,3 +107,10 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+IO
+vposer
+model
+test_calc_volume.py
+collecte_data_from_dir.py
+.gitignore
+test.py

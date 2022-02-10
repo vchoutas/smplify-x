@@ -15,8 +15,8 @@ use_cuda: True
 float_dtype: "float32"
 use_joints_conf: True
 use_pca: True
-use_hands: True
-use_face: True
+use_hands: False
+use_face: False
 flat_hand_mean: False
 # The number of mixture components for the pose prior
 num_gaussians: 8
@@ -28,7 +28,7 @@ focal_length: 5000
 num_pca_comps: 12
 # The constant for the robust loss function
 rho: 100
-interpenetration: True
+interpenetration: False #True
 df_cone_height: 0.0001
 # Upper arms and Spine 2
 # Neck and jaw
@@ -42,8 +42,8 @@ gtol: 1e-9
 lr: 1.0
 # Max number of optimization iterations
 maxiters: 30
-interactive: True
-visualize: False
+interactive: False
+visualize: True
 # Relative change in loss value
 body_pose_prior_weights:
     - 4.04e2

@@ -4,7 +4,10 @@ torchgeometry>=0.1.2
 PyYAML==5.1.1
 configargparse
 smplx
+dotmap
 pillow
 opencv-python
 tqdm
+trimesh
+pyrender
 -e git+https://github.com/nghorbani/human_body_prior#egg=human_body_prior
