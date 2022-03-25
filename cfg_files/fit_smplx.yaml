@@ -8,19 +8,19 @@ output_folder: 'smplx_debug'
 prior_folder: 'priors'
 model_folder: 'models'
 result_folder: 'results'
-gender: "neutral"
+gender: "male"
 model_type: 'smplx'
 # Flag for using the GPU
 use_cuda: True
 float_dtype: "float32"
 use_joints_conf: True
-use_pca: True
+use_pca: False
 use_hands: False
 use_face: False
 flat_hand_mean: False
 # The number of mixture components for the pose prior
 num_gaussians: 8
-body_prior_type: 'l2'
+body_prior_type: 'none'
 left_hand_prior_type: l2
 right_hand_prior_type: l2
 jaw_prior_type: 'l2'
@@ -41,9 +41,9 @@ ftol: 1e-9
 gtol: 1e-9
 lr: 1.0
 # Max number of optimization iterations
-maxiters: 30
+maxiters: 64
 interactive: False
-visualize: True
+visualize: False
 # Relative change in loss value
 body_pose_prior_weights:
     - 4.04e2
@@ -99,5 +99,5 @@ face_joints_weights:
     - 0.0
     - 2.0
 
-use_vposer: True
+use_vposer: False
 vposer_ckpt: "vposer"

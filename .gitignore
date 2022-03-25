@@ -110,7 +110,6 @@ venv.bak/
 IO
 vposer
 models
-test_calc_volume.py
 collecte_data_from_dir.py
-.gitignore
 test.py
+src/human-body-prior
