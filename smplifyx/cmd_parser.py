@@ -40,8 +40,9 @@ def parse_config(argv=None):
     parser.add_argument('--max_persons', type=int, default=3,
                         help='The maximum number of persons to process')
     parser.add_argument('-c', '--config',
-                        required=True, is_config_file=True,
+                        default="cfg_files/fit_smplx.yaml", is_config_file=True,
                         help='config file path')
+    parser.add_argument('--latent_dim', type=int, default=32, help='latent dimension')
     parser.add_argument('--loss_type', default='smplify', type=str,
                         help='The type of loss to use')
     parser.add_argument('--interactive',
@@ -128,7 +129,7 @@ def parse_config(argv=None):
                         type=int,
                         help='The number of gaussian for the Pose Mixture' +
                         ' Prior.')
-    parser.add_argument('--use_pca', default=True,
+    parser.add_argument('--use_pca', default=False,
                         type=lambda x: x.lower() in ['true', '1'],
                         help='Use the low dimensional PCA space for the hands')
     parser.add_argument('--num_pca_comps', default=6, type=int,
@@ -157,10 +158,10 @@ def parse_config(argv=None):
                         help='The type of prior that will be used to' +
                         ' regularize the optimization of the pose of the' +
                         ' jaw.')
-    parser.add_argument('--use_vposer', default=False,
+    parser.add_argument('--use_vposer', default=True,
                         type=lambda arg: arg.lower() in ['true', '1'],
                         help='Use the VAE pose embedding')
-    parser.add_argument('--vposer_ckpt', type=str, default='',
+    parser.add_argument('--vposer_ckpt', type=str, default='vposer/vposer_v1_0',
                         help='The path to the V-Poser checkpoint')
     # Left/Right shoulder and hips
     parser.add_argument('--init_joints_idxs', nargs='*', type=int,
@@ -243,7 +244,7 @@ def parse_config(argv=None):
     parser.add_argument('--point2plane', default=False,
                         type=lambda arg: arg.lower() in ['true', '1'],
                         help='Use point to plane distance')
-    parser.add_argument('--part_segm_fn', default='', type=str,
+    parser.add_argument('--part_segm_fn', default='smplx_parts_segm.pkl', type=str,
                         help='The file with the part segmentation for the' +
                         ' faces of the model')
     parser.add_argument('--ign_part_pairs', default=None,

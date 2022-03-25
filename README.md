@@ -48,8 +48,13 @@ python smplifyx/main.py --config cfg_files/fit_smplx.yaml
     --part_segm_fn smplx_parts_segm.pkl
 ```
 
+smplx
 ```
-python smplifyx/main.py --config cfg_files/fit_smplx.yaml --data_folder DATA_FOLDER --output_folder OUTPUT_FOLDER --visualize=True --model_folder models --vposer_ckpt VPOSER_FOLDER --part_segm_fn smplx_parts_segm.pkl
+python3 smplifyx/main.py --config cfg_files/fit_smplx.yaml --data_folder IO/input/test --output_folder IO/output/test --model_folder models
+```
+smpl (useful for change `body pose` output shape)
+```
+python3 smplifyx/main.py --config cfg_files/fit_smpl.yaml --data_folder IO/input/test --output_folder IO/output/test --model_folder models
 ```
 
 where the `DATA_FOLDER` should contain two subfolders, `images`, where the
