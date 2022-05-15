@@ -99,5 +99,5 @@ face_joints_weights:
     - 0.0
     - 2.0
 
-use_vposer: False
+use_vposer: True
 vposer_ckpt: "vposer"
