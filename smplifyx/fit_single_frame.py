@@ -43,7 +43,8 @@ import PIL.Image as pil_img
 from optimizers import optim_factory
 
 import fitting
-from human_body_prior.tools.model_loader import load_vposer
+from human_body_prior.tools.model_loader import load_model 
+from human_body_prior.models.vposer_model import VPoser
 
 
 def fit_single_frame(img,
@@ -85,6 +86,7 @@ def fit_single_frame(img,
                      focal_length=5000.,
                      side_view_thsh=25.,
                      rho=100,
+                     latent_dim=32,
                      vposer_latent_dim=32,
                      vposer_ckpt='',
                      use_joints_conf=False,
@@ -98,8 +100,8 @@ def fit_single_frame(img,
                      left_shoulder_idx=2,
                      right_shoulder_idx=5,
                      **kwargs):
-    assert batch_size == 1, 'PyTorch L-BFGS only supports batch_size == 1'
 
+    assert batch_size == 1, 'PyTorch L-BFGS only supports batch_size == 1'
     device = torch.device('cuda') if use_cuda else torch.device('cpu')
 
     if degrees is None:
@@ -180,12 +182,12 @@ def fit_single_frame(img,
     use_vposer = kwargs.get('use_vposer', True)
     vposer, pose_embedding = [None, ] * 2
     if use_vposer:
-        pose_embedding = torch.zeros([batch_size, 32],
+        pose_embedding = torch.zeros([batch_size, latent_dim],
                                      dtype=dtype, device=device,
                                      requires_grad=True)
 
         vposer_ckpt = osp.expandvars(vposer_ckpt)
-        vposer, _ = load_vposer(vposer_ckpt, vp_model='snapshot')
+        vposer, _ = load_model(vposer_ckpt, model_code=VPoser, remove_words_in_model_weights='vp_model.', disable_grad=True)
         vposer = vposer.to(device=device)
         vposer.eval()
 
@@ -193,8 +195,8 @@ def fit_single_frame(img,
         body_mean_pose = torch.zeros([batch_size, vposer_latent_dim],
                                      dtype=dtype)
     else:
-        body_mean_pose = body_pose_prior.get_mean().detach().cpu()
-
+        body_mean_pose = torch.zeros([batch_size, latent_dim], dtype=dtype)
+        
     keypoint_data = torch.tensor(keypoints, dtype=dtype)
     gt_joints = keypoint_data[:, :, :2]
     if use_joints_conf:
@@ -302,11 +304,8 @@ def fit_single_frame(img,
                                **kwargs)
     loss = loss.to(device=device)
 
-    with fitting.FittingMonitor(
-            batch_size=batch_size, visualize=visualize, **kwargs) as monitor:
-
+    with fitting.FittingMonitor(batch_size=batch_size, visualize=visualize, **kwargs) as monitor:
         img = torch.tensor(img, dtype=dtype)
-
         H, W, _ = img.shape
 
         data_weight = 1000 / H
@@ -332,12 +331,8 @@ def fit_single_frame(img,
 
         # Re-enable gradient calculation for the camera translation
         camera.translation.requires_grad = True
-
         camera_opt_params = [camera.translation, body_model.global_orient]
-
-        camera_optimizer, camera_create_graph = optim_factory.create_optimizer(
-            camera_opt_params,
-            **kwargs)
+        camera_optimizer, camera_create_graph = optim_factory.create_optimizer(camera_opt_params, **kwargs)
 
         # The closure passed to the optimizer
         fit_camera = monitor.create_fitting_closure(
@@ -361,10 +356,8 @@ def fit_single_frame(img,
         if interactive:
             if use_cuda and torch.cuda.is_available():
                 torch.cuda.synchronize()
-            tqdm.write('Camera initialization done after {:.4f}'.format(
-                time.time() - camera_init_start))
-            tqdm.write('Camera initialization final loss {:.4f}'.format(
-                cam_init_loss_val))
+            tqdm.write('Camera initialization done after {:.4f}'.format(time.time() - camera_init_start))
+            tqdm.write('Camera initialization final loss {:.4f}'.format(cam_init_loss_val))
 
         # If the 2D detections/positions of the shoulder joints are too
         # close the rotate the body by 180 degrees and also fit to that
@@ -390,9 +383,7 @@ def fit_single_frame(img,
         final_loss_val = 0
         for or_idx, orient in enumerate(tqdm(orientations, desc='Orientation')):
             opt_start = time.time()
-
-            new_params = defaultdict(global_orient=orient,
-                                     body_pose=body_mean_pose)
+            new_params = defaultdict(global_orient=orient, body_pose=body_mean_pose)
             body_model.reset_params(**new_params)
             if use_vposer:
                 with torch.no_grad():
@@ -483,9 +474,7 @@ def fit_single_frame(img,
             pickle.dump(results[min_idx]['result'], result_file, protocol=2)
 
     if save_meshes or visualize:
-        body_pose = vposer.decode(
-            pose_embedding,
-            output_type='aa').view(1, -1) if use_vposer else None
+        body_pose = (vposer.decode(pose_embedding).get( 'pose_body')).reshape(1, -1) if use_vposer else None
 
         model_type = kwargs.get('model_type', 'smpl')
         append_wrists = model_type == 'smpl' and use_vposer

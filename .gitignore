@@ -107,3 +107,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+IO
+vposer
+models
+collecte_data_from_dir.py
+test.py
+src/human-body-prior

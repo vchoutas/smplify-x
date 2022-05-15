@@ -200,66 +200,63 @@ def main(**args):
 
     for idx, data in enumerate(dataset_obj):
 
-        img = data['img']
-        fn = data['fn']
-        keypoints = data['keypoints']
-        print('Processing: {}'.format(data['img_path']))
+            img = data['img']
+            fn = data['fn']
+            keypoints = data['keypoints']
+            print('Processing: {}'.format(data['img_path']))
 
-        curr_result_folder = osp.join(result_folder, fn)
-        if not osp.exists(curr_result_folder):
-            os.makedirs(curr_result_folder)
-        curr_mesh_folder = osp.join(mesh_folder, fn)
-        if not osp.exists(curr_mesh_folder):
-            os.makedirs(curr_mesh_folder)
-        for person_id in range(keypoints.shape[0]):
-            if person_id >= max_persons and max_persons > 0:
-                continue
+            curr_result_folder = osp.join(result_folder, fn)
+            if not osp.exists(curr_result_folder):
+                os.makedirs(curr_result_folder)
+            curr_mesh_folder = osp.join(mesh_folder, fn)
+            if not osp.exists(curr_mesh_folder):
+                os.makedirs(curr_mesh_folder)
+            for person_id in range(keypoints.shape[0]):
+                if person_id >= max_persons and max_persons > 0:
+                    continue
 
-            curr_result_fn = osp.join(curr_result_folder,
-                                      '{:03d}.pkl'.format(person_id))
-            curr_mesh_fn = osp.join(curr_mesh_folder,
-                                    '{:03d}.obj'.format(person_id))
+                curr_result_fn = osp.join(curr_result_folder, '{:03d}.pkl'.format(person_id))
+                curr_mesh_fn = osp.join(curr_mesh_folder, '{:03d}.obj'.format(person_id))
+                curr_img_folder = osp.join(output_folder, 'images', fn, '{:03d}'.format(person_id))
+                
+                if not osp.exists(curr_img_folder):
+                    os.makedirs(curr_img_folder)
 
-            curr_img_folder = osp.join(output_folder, 'images', fn,
-                                       '{:03d}'.format(person_id))
-            if not osp.exists(curr_img_folder):
-                os.makedirs(curr_img_folder)
+                if gender_lbl_type != 'none':
+                    if gender_lbl_type == 'pd' and 'gender_pd' in data:
+                        gender = data['gender_pd'][person_id]
+                    if gender_lbl_type == 'gt' and 'gender_gt' in data:
+                        gender = data['gender_gt'][person_id]
+                else:
+                    gender = input_gender
 
-            if gender_lbl_type != 'none':
-                if gender_lbl_type == 'pd' and 'gender_pd' in data:
-                    gender = data['gender_pd'][person_id]
-                if gender_lbl_type == 'gt' and 'gender_gt' in data:
-                    gender = data['gender_gt'][person_id]
-            else:
-                gender = input_gender
+                if gender == 'neutral':
+                    body_model = neutral_model
+                elif gender == 'female':
+                    body_model = female_model
+                elif gender == 'male':
+                    body_model = male_model
 
-            if gender == 'neutral':
-                body_model = neutral_model
-            elif gender == 'female':
-                body_model = female_model
-            elif gender == 'male':
-                body_model = male_model
+                out_img_fn = osp.join(curr_img_folder, 'output.png')
 
-            out_img_fn = osp.join(curr_img_folder, 'output.png')
-
-            fit_single_frame(img, keypoints[[person_id]],
-                             body_model=body_model,
-                             camera=camera,
-                             joint_weights=joint_weights,
-                             dtype=dtype,
-                             output_folder=output_folder,
-                             result_folder=curr_result_folder,
-                             out_img_fn=out_img_fn,
-                             result_fn=curr_result_fn,
-                             mesh_fn=curr_mesh_fn,
-                             shape_prior=shape_prior,
-                             expr_prior=expr_prior,
-                             body_pose_prior=body_pose_prior,
-                             left_hand_prior=left_hand_prior,
-                             right_hand_prior=right_hand_prior,
-                             jaw_prior=jaw_prior,
-                             angle_prior=angle_prior,
-                             **args)
+                fit_single_frame(img, keypoints[[person_id]],
+                                body_model=body_model,
+                                camera=camera,
+                                joint_weights=joint_weights,
+                                dtype=dtype,
+                                output_folder=output_folder,
+                                result_folder=curr_result_folder,
+                                out_img_fn=out_img_fn,
+                                result_fn=curr_result_fn,
+                                mesh_fn=curr_mesh_fn,
+                                shape_prior=shape_prior,
+                                expr_prior=expr_prior,
+                                body_pose_prior=body_pose_prior,
+                                left_hand_prior=left_hand_prior,
+                                right_hand_prior=right_hand_prior,
+                                jaw_prior=jaw_prior,
+                                angle_prior=angle_prior,
+                                **args)
 
     elapsed = time.time() - start
     time_msg = time.strftime('%H hours, %M minutes, %S seconds',

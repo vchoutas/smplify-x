@@ -1,5 +1,6 @@
 ## Expressive Body Capture: 3D Hands, Face, and Body from a Single Image
 
+
 [[Project Page](https://smpl-x.is.tue.mpg.de/)] 
 [[Paper](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/497/SMPL-X.pdf)]
 [[Supp. Mat.](https://ps.is.tuebingen.mpg.de/uploads_file/attachment/attachment/498/SMPL-X-supp.pdf)]
@@ -46,8 +47,18 @@ python smplifyx/main.py --config cfg_files/fit_smplx.yaml
     --vposer_ckpt VPOSER_FOLDER
     --part_segm_fn smplx_parts_segm.pkl
 ```
-where the `DATA_FOLDER` should contain two subfolders, *images*, where the
-images are located, and *keypoints*, where the OpenPose output should be
+
+smplx
+```
+python3 smplifyx/main.py --config cfg_files/fit_smplx.yaml --data_folder IO/input/test --output_folder IO/output/test --model_folder models
+```
+smpl (useful for change `body pose` output shape)
+```
+python3 smplifyx/main.py --config cfg_files/fit_smpl.yaml --data_folder IO/input/test --output_folder IO/output/test --model_folder models
+```
+
+where the `DATA_FOLDER` should contain two subfolders, `images`, where the
+images are located, and `keypoints`, where the OpenPose output should be
 stored.
 
 ### Different Body Models
