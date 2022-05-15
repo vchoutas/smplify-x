@@ -20,7 +20,7 @@ use_face: False
 flat_hand_mean: False
 # The number of mixture components for the pose prior
 num_gaussians: 8
-body_prior_type: 'none'
+body_prior_type: 'l2'
 left_hand_prior_type: l2
 right_hand_prior_type: l2
 jaw_prior_type: 'l2'
