@@ -94,7 +94,7 @@ fitting code.
 ### Optional Dependencies
 
 1. [PyTorch Mesh self-intersection](https://github.com/vchoutas/torch-mesh-isect) for interpenetration penalty 
-   * Download the per-triangle part segmentation: [smplx_parts_segm.pkl](https://owncloud.tuebingen.mpg.de/index.php/s/MWnr8Kso4K8T8at)
+   * Download the per-triangle part segmentation: [smplx_parts_segm.pkl](https://smpl-x.is.tue.mpg.de/download.php) (ctrl/cmd +F for the filename)
 1. [Trimesh](https://trimsh.org/) for loading triangular meshes
 1. [Pyrender](https://pyrender.readthedocs.io/) for visualization
 
